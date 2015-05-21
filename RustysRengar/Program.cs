@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
+
 
 
 namespace RengarSweg
@@ -23,15 +19,16 @@ namespace RengarSweg
             }
         }
 
-        private static Orbwalking.Orbwalker Orbwalker;
+        private static Orbwalking.Orbwalker orbwalker;
 
-        private static Spell Q, W, E;
+        private static Spell q, w, e;
 
-        private static int Combo;
+        private static int combo;
 
-        private static int Mixed;
+        private static int mixed;
+    
 
-        private static void Main(string[] args)
+    private static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += args1 => Game_OnGameLoad(args1);
         }
@@ -41,22 +38,22 @@ namespace RengarSweg
             throw new NotImplementedException();
         }
 
-        private static void Game_OnGameLoad(EventArgs args, DrawingDraw Drawing_OnDraw)
+        private static void Game_OnGameLoad(EventArgs args, DrawingDraw drawingOnDraw)
         {
             if (Player.ChampionName != "Rengar") return;
 
-            Q = new Spell(SpellSlot.Q, 0f);
-            W = new Spell(SpellSlot.W, 500f);
-            E = new Spell(SpellSlot.E, 950f);
+            q = new Spell(SpellSlot.Q, 0f);
+            w = new Spell(SpellSlot.W, 500f);
+            e = new Spell(SpellSlot.E, 950f);
 
-            Q.SetTargetted(0.5f, 200f);
-            E.SetSkillshot(0.5f, 10f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            W.SetSkillshot(0.5f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            q.SetTargetted(0.5f, 200f);
+            e.SetSkillshot(0.5f, 10f, float.MaxValue, false, SkillshotType.SkillshotLine);
+            w.SetSkillshot(0.5f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             Menu = new Menu(Player.ChampionName, Player.ChampionName, true);
 
             Menu orbwalkerMenu = Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
+            orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
 
             Menu ts = Menu.AddSubMenu(new Menu("Target Selector", "Target Selector"));
             TargetSelector.AddToMenu(ts);
@@ -77,7 +74,7 @@ namespace RengarSweg
             mixedMenu.AddItem(new MenuItem("Harass", "Harass").SetValue(new KeyBind('C', KeyBindType.Press)));
 
             Menu.AddToMainMenu();
-            Drawing.OnDraw += Drawing_OnDraw;
+            Drawing.OnDraw += drawingOnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             // Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
@@ -88,9 +85,9 @@ namespace RengarSweg
             Obj_AI_Hero sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && sender.Distance(Player) < Q.Range)
+            if (sender.IsEnemy && sender.Distance(Player) < q.Range)
             {
-                Q.CastOnUnit(sender);
+                q.CastOnUnit(sender);
             }
         }
 
@@ -111,14 +108,14 @@ namespace RengarSweg
         {
             if (Player.IsDead) return;
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 Savagery(null);
                 Battleroar();
                 BolaStrike();
             }
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if (orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 Savagery(null);
                 Battleroar();
@@ -131,14 +128,14 @@ namespace RengarSweg
         {
             if (!Menu.Item("useQ").GetValue<bool>()) return;
 
-            if (Q.IsReady())
+            if (q.IsReady())
             {
                 int enemies = ObjectManager.Get<Obj_AI_Hero>().Count(x => x.IsEnemy && x.Distance(Player, false) < 200);
 
 
-                if (target.IsValidTarget(Q.Range))
+                if (target.IsValidTarget(q.Range))
                 {
-                    Q.CastOnUnit(target);
+                    q.CastOnUnit(target);
                 }
             }
         }
@@ -148,14 +145,14 @@ namespace RengarSweg
         {
             if (!Menu.Item("useW").GetValue<bool>()) return;
 
-            if (W.IsReady())
+            if (w.IsReady())
             {
                 int enemies =
                     ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.Distance(Player, false) < 500).Count();
 
                 if (enemies > 0)
                 {
-                    W.Cast();
+                    w.Cast();
                 }
             }
         }
@@ -165,13 +162,13 @@ namespace RengarSweg
         {
             if (!Menu.Item("useE").GetValue<bool>()) return;
 
-            if (E.IsReady())
+            if (e.IsReady())
             {
                 Obj_AI_Hero target = TargetSelector.GetTarget(1000f, TargetSelector.DamageType.Physical);
 
-                if (target.IsValidTarget(E.Range))
+                if (target.IsValidTarget(e.Range))
                 {
-                    E.Cast(target.Position);
+                    e.Cast(target.Position);
                 }
             }
         }
