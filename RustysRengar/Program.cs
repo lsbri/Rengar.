@@ -29,9 +29,13 @@ namespace RengarSweg
     
 
     private static void Main(string[] args)
+    {
+        if (args == null)
         {
-            CustomEvents.Game.OnGameLoad += args1 => Game_OnGameLoad(args1);
+            throw new ArgumentNullException("args");
         }
+        CustomEvents.Game.OnGameLoad += args1 => Game_OnGameLoad(args1);
+    }
 
         private static void Game_OnGameLoad(EventArgs args1)
         {
@@ -128,15 +132,16 @@ namespace RengarSweg
         {
             if (!Menu.Item("useQ").GetValue<bool>()) return;
 
-            if (q.IsReady())
+            if (!q.IsReady())
             {
-                int enemies = ObjectManager.Get<Obj_AI_Hero>().Count(x => x.IsEnemy && x.Distance(Player, false) < 200);
+                return;
+            }
+            var enemies = ObjectManager.Get<Obj_AI_Hero>().Count(x => x.IsEnemy && x.Distance(Player, false) < 200);
 
 
-                if (target.IsValidTarget(q.Range))
-                {
-                    q.CastOnUnit(target);
-                }
+            if (target.IsValidTarget(q.Range))
+            {
+                q.CastOnUnit(target);
             }
         }
 
@@ -148,7 +153,7 @@ namespace RengarSweg
             if (w.IsReady())
             {
                 int enemies =
-                    ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsEnemy && x.Distance(Player, false) < 500).Count();
+                    ObjectManager.Get<Obj_AI_Hero>().Count(x => x.IsEnemy && x.Distance(Player, false) < 500);
 
                 if (enemies > 0)
                 {

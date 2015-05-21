@@ -10,6 +10,6 @@ c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRen
 c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\bin\x86\Debug\LeagueSharp.Sandbox.dll
 c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\bin\x86\Debug\Newtonsoft.Json.dll
 c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\bin\x86\Debug\LeagueSharp.xml
+c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\obj\x86\Debug\RustysRengar.csprojResolveAssemblyReference.cache
 c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\obj\x86\Debug\RustysRengar.exe
 c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\obj\x86\Debug\RustysRengar.pdb
-c:\users\intentions\documents\visual studio 2013\Projects\RustysRengar\RustysRengar\obj\x86\Debug\RustysRengar.csprojResolveAssemblyReference.cache
